@@ -13,9 +13,9 @@ app.use((req, res, next) => {
 
 // Datos de ejemplo (simulando una base de datos)
 const users = [
-    {name: 'ana', id: 1 },
-    {name: 'Luis', id: 2,},
-    {name: 'Carla', id: 3},
+    {name: 'Ana', id: 1, edad: 23 },
+    {name: 'Luis', id: 2, edad: 54},
+    {name: 'Carla', id: 3, edad: 22},
   ];
 
 // 5️⃣ Ruta raíz "/"
@@ -43,6 +43,18 @@ app.post('/users', (req, res) => {
   res.status(201).json(newUser);
 
 });
+
+app.get('/users/:name', (req,res) =>{
+  const name = req.params.name.toLowerCase();
+  const user = users.find(user => user.name.toLowerCase() === name);
+
+  if (user) {
+    res.json(user);
+    
+  }else{
+    res.status(404).json({message: 'usuario no encontrado'})
+  }
+})
 
 ///app.post('/personaje', (req,res) => {
   ///const newPlayer = req.body;
