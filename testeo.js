@@ -13,9 +13,9 @@ app.use((req, res, next) => {
 
 // Datos de ejemplo (simulando una base de datos)
 const users = [
-    { id: 1, name: 'ana' },
-    { id: 2, name: 'Luis' },
-    { id: 3, name: 'Carla' },
+    {name: 'ana', id: 1 },
+    {name: 'Luis', id: 2,},
+    {name: 'Carla', id: 3},
   ];
 
 // 5️⃣ Ruta raíz "/"
@@ -37,8 +37,24 @@ app.post('/users', (req, res) => {
   console.log('Nuevo usuario recibido:', newUser);
 
   newUser.id = Math.floor(Math.random() * 1000);
+
+  users.push(newUser)
+
   res.status(201).json(newUser);
+
 });
+
+///app.post('/personaje', (req,res) => {
+  ///const newPlayer = req.body;
+  ///console.log("Creando personaje...")
+
+  ///res.status(200).json(newPlayer)
+
+
+///})
+
+
+
 
 
 const PORT = 3000;
