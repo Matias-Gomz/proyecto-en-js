@@ -13,59 +13,86 @@ app.use((req, res, next) => {
 
 // Datos de ejemplo (simulando una base de datos)
 const users = [
-    {name: 'Ana', id: 1, edad: 23 },
-    {name: 'Luis', id: 2, edad: 54},
-    {name: 'Carla', id: 3, edad: 22},
+    {id: 1, name: 'Ana', age: 23 },
+    {id: 2, name: 'Luis', age: 54},
+    {id: 3, name: 'Carla', age: 22},
   ];
 
-// 5️⃣ Ruta raíz "/"
-// app.get() crea una ruta que responde a solicitudes GET.
+
+  /// ruta raiz
 app.get('/', (req, res) => {
   res.send('Welcome to Express.js!');
 });
 
-// 6️⃣ Ruta GET /users
+
 // Devolvemos un JSON de usuarios (como haría una API real)
 app.get('/users', (req, res) => {
   res.json(users); // Express convierte automáticamente el objeto a JSON
 });
 
-//ruta users
+//ruta users Create
 
-app.post('/users', (req, res) => {
-  const newUser = req.body; // Express ya parseó el JSON del body.
-  console.log('Nuevo usuario recibido:', newUser);
+app.post('/users', (req,res) => {
 
-  newUser.id = Math.floor(Math.random() * 1000);
+  const {name, age} = req.body;
 
-  users.push(newUser)
+  if (!name||!age){
 
-  res.status(201).json(newUser);
+    return res.status(400).json({ message: "Faltan datos." });
+  }
 
-});
+  const newUser = {id:Math.floor(Math.random() * 1000), name, age};
 
+  users.push(newUser);
+
+  console.log('Nuevo usuario recibido.');
+
+ return res.status(201).json(newUser);
+})
+
+
+////// Read
 app.get('/users/:name', (req,res) =>{
   const name = req.params.name.toLowerCase();
   const user = users.find(user => user.name.toLowerCase() === name);
 
   if (user) {
-    res.json(user);
+    return res.json(user);
     
   }else{
-    res.status(404).json({message: 'usuario no encontrado'})
+    return res.status(404).json({message: 'Usuario no encontrado.'})
   }
 })
 
-///app.post('/personaje', (req,res) => {
-  ///const newPlayer = req.body;
-  ///console.log("Creando personaje...")
+///////Update
+app.put('/users/:id', (req,res) =>{
+  const id = Math.floor(Number(req.params.id))
 
-  ///res.status(200).json(newPlayer)
+  const index = users.findIndex(usuario => usuario.id === id )
+
+  const {name, age} = req.body;
+
+  if (index === -1) {
+    return res.status(404).json({ message: "Usuario no encontrado." })
+    
+  }
+
+  if (req.body.name) {
+    users[index].name = req.body.name
+    
+  }
+
+    if (req.body.age && req.body.age >= 0 && req.body.age <= 122) {
+    users[index].age = req.body.age
+    
+  }else{
+    return res.status(404).json({ message: "edad no valida." })
+  }
+
+  return res.status(202).json(users[index])
 
 
-///})
-
-
+})
 
 
 
