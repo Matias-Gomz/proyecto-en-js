@@ -66,6 +66,7 @@ app.get('/users/:name', (req,res) =>{
 
 ///////Update
 app.put('/users/:id', (req,res) =>{
+
   const id = Math.floor(Number(req.params.id))
 
   const index = users.findIndex(usuario => usuario.id === id )
@@ -94,6 +95,25 @@ app.put('/users/:id', (req,res) =>{
 
 })
 
+///////Delete
+app.delete('/users/:id', (req,res) => {
+  const id = Math.floor(Number(req.params.id))
+
+  const index = users.findIndex(usuario => usuario.id === id )
+
+  if (index === -1) {
+    return res.status(404).json({ message: "Usuario no encontrado." })
+    
+  }
+
+  
+  users.splice(index,1)
+
+  return res.status(200).json({message: "Usuario " + users[index].name + " eliminado"})
+    
+  
+
+})
 
 
 const PORT = 3000;
